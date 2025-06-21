@@ -1,8 +1,10 @@
-//! Structs that act as bags of named components which [`Color`][crate::Color]s of different color encodings
-//! may be `Deref`erenced to in order to gain more appropriate dot syntax for that encoding.
+//! Structs that act as bags of named components which [`Color`][crate::Color]s
+//! of different color encodings may be `Deref`erenced to in order to gain more
+//! appropriate dot syntax for that encoding.
 //!
-//! For example, a [`Color`][crate::Color] in the [`SrgbU8`][crate::encodings::SrgbU8] color space can be `Deref`'d to [`Rgb`], allowing you
-//! to do things like `color.r` or `color.g`.
+//! For example, a [`Color`][crate::Color] in the
+//! [`SrgbU8`][crate::encodings::SrgbU8] color space can be `Deref`'d to
+//! [`Rgb`], allowing you to do things like `color.r` or `color.g`.
 
 use core::fmt;
 
@@ -25,10 +27,11 @@ use crate::traits::ComponentStructFor;
 // #[cfg(feature = "bytemuck")]
 // impl_bytemuck!(Rgb, ICtCp, Xyz, Lab, LCh);
 
-/// A bag of components with names R, G, B. Some `Color`s with RGB color encodings
-/// will `Deref`/`DerefMut` to this struct so that you can access their components with dot-syntax.
+/// A bag of components with names R, G, B. Some `Color`s with RGB color
+/// encodings will `Deref`/`DerefMut` to this struct so that you can access
+/// their components with dot-syntax.
 #[repr(C)]
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Rgb<T> {
     pub r: T,
     pub g: T,
@@ -73,43 +76,44 @@ impl<T: fmt::Display> fmt::Debug for Rgb<T> {
     }
 }
 
-/// A bag of components with names R, G, B, A. Some `Color`s with RGBA color encodings
-/// will `Deref`/`DerefMut` to this struct so that you can access their components with dot-syntax.
+/// A bag of components with names R, G, B, A. Some `Color`s with RGBA color
+/// encodings will `Deref`/`DerefMut` to this struct so that you can access
+/// their components with dot-syntax.
 #[repr(C)]
-#[derive(Clone, Copy, PartialEq)]
-pub struct RgbA<T> {
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Rgba<T> {
     pub r: T,
     pub g: T,
     pub b: T,
     pub a: T,
 }
 
-unsafe impl ComponentStructFor<U8ARepr> for RgbA<u8> {
-    fn cast(repr: &U8ARepr) -> &Self {
+unsafe impl ComponentStructFor<U8aRepr> for Rgba<u8> {
+    fn cast(repr: &U8aRepr) -> &Self {
         // SAFETY: [u8; 4] is guaranteed to have the same layout as Self
-        unsafe { &*(repr as *const U8ARepr as *const Self) }
+        unsafe { &*(repr as *const U8aRepr as *const Self) }
     }
 
-    fn cast_mut(repr: &mut U8ARepr) -> &mut Self {
+    fn cast_mut(repr: &mut U8aRepr) -> &mut Self {
         // SAFETY: [u8; 4] is guaranteed to have the same layout as Self
-        unsafe { &mut *(repr as *mut U8ARepr as *mut Self) }
+        unsafe { &mut *(repr as *mut U8aRepr as *mut Self) }
     }
 }
 
-unsafe impl ComponentStructFor<F32ARepr> for RgbA<f32> {
-    fn cast(repr: &F32ARepr) -> &Self {
+unsafe impl ComponentStructFor<F32aRepr> for Rgba<f32> {
+    fn cast(repr: &F32aRepr) -> &Self {
         // SAFETY: Vec4 is guaranteed to have the same layout as Self
-        unsafe { &*(repr as *const F32ARepr as *const Self) }
+        unsafe { &*(repr as *const F32aRepr as *const Self) }
     }
 
-    fn cast_mut(repr: &mut F32ARepr) -> &mut Self {
+    fn cast_mut(repr: &mut F32aRepr) -> &mut Self {
         // SAFETY: Vec4 is guaranteed to have the same layout as Self
-        unsafe { &mut *(repr as *mut F32ARepr as *mut Self) }
+        unsafe { &mut *(repr as *mut F32aRepr as *mut Self) }
     }
 }
 
 #[cfg(not(target_arch = "spirv"))]
-impl<T: fmt::Display> fmt::Display for RgbA<T> {
+impl<T: fmt::Display> fmt::Display for Rgba<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
@@ -120,7 +124,7 @@ impl<T: fmt::Display> fmt::Display for RgbA<T> {
 }
 
 #[cfg(not(target_arch = "spirv"))]
-impl<T: fmt::Display> fmt::Debug for RgbA<T> {
+impl<T: fmt::Display> fmt::Debug for Rgba<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
@@ -130,10 +134,11 @@ impl<T: fmt::Display> fmt::Debug for RgbA<T> {
     }
 }
 
-/// A bag of components with names L, A, B. Some `Color`s with Lab color encodings
-/// will `Deref`/`DerefMut` to this struct so that you can access their components with dot-syntax.
+/// A bag of components with names L, A, B. Some `Color`s with Lab color
+/// encodings will `Deref`/`DerefMut` to this struct so that you can access
+/// their components with dot-syntax.
 #[repr(C)]
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Lab<T> {
     pub l: T,
     pub a: T,

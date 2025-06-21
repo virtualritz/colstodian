@@ -35,7 +35,7 @@ impl_conversion!(SPACENAME to DisplayP3         => PRIMARIES_WHITEPOINT_TO_P3_D6
 pub struct Srgb;
 
 impl LinearColorSpace for Srgb {
-    const PRIMARIES: RGBPrimaries = RGBPrimaries::BT_709;
+    const PRIMARIES: RgbPrimaries = RgbPrimaries::Bt709;
     const WHITE_POINT: WhitePoint = WhitePoint::D65;
 }
 
@@ -50,7 +50,7 @@ impl_conversion!(Srgb to DisplayP3         => BT_709_D65_TO_P3_D65);
 pub struct CieXYZ;
 
 impl LinearColorSpace for CieXYZ {
-    const PRIMARIES: RGBPrimaries = RGBPrimaries::CIE_XYZ;
+    const PRIMARIES: RgbPrimaries = RgbPrimaries::CieXyz;
     const WHITE_POINT: WhitePoint = WhitePoint::D65;
 }
 
@@ -65,7 +65,7 @@ impl_conversion!(CieXYZ to DisplayP3         => CIE_XYZ_D65_TO_P3_D65);
 pub struct Bt2020;
 
 impl LinearColorSpace for Bt2020 {
-    const PRIMARIES: RGBPrimaries = RGBPrimaries::BT_2020;
+    const PRIMARIES: RgbPrimaries = RgbPrimaries::Bt2020;
     const WHITE_POINT: WhitePoint = WhitePoint::D65;
 }
 
@@ -73,7 +73,7 @@ impl LinearColorSpace for Bt2020 {
 pub struct AcesCg;
 
 impl LinearColorSpace for AcesCg {
-    const PRIMARIES: RGBPrimaries = RGBPrimaries::AP1;
+    const PRIMARIES: RgbPrimaries = RgbPrimaries::Ap1;
     const WHITE_POINT: WhitePoint = WhitePoint::D60;
 }
 
@@ -81,7 +81,7 @@ impl LinearColorSpace for AcesCg {
 pub struct Aces2065;
 
 impl LinearColorSpace for Aces2065 {
-    const PRIMARIES: RGBPrimaries = RGBPrimaries::AP0;
+    const PRIMARIES: RgbPrimaries = RgbPrimaries::Ap0;
     const WHITE_POINT: WhitePoint = WhitePoint::D60;
 }
 
@@ -89,6 +89,6 @@ impl LinearColorSpace for Aces2065 {
 pub struct DisplayP3;
 
 impl LinearColorSpace for DisplayP3 {
-    const PRIMARIES: RGBPrimaries = RGBPrimaries::P3;
+    const PRIMARIES: RgbPrimaries = RgbPrimaries::P3;
     const WHITE_POINT: WhitePoint = WhitePoint::D65;
 }

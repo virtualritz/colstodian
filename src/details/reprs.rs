@@ -8,22 +8,24 @@ impl ColorRepr for U8Repr {
 }
 
 /// Just a `[u8; 4]`. Used for 8-bits-per-channel, four channel encodings.
-pub type U8ARepr = [u8; 4];
+pub type U8aRepr = [u8; 4];
 
-impl ColorRepr for U8ARepr {
+impl ColorRepr for U8aRepr {
     type Element = u8;
 }
 
-/// Just a [`glam::Vec3`] (also equivalent in layout to a `[f32; 3]`). Used for 32-bits-per-channel, three channel encodings.
+/// Just a [`glam::Vec3`] (also equivalent in layout to a `[f32; 3]`). Used for
+/// 32-bits-per-channel, three channel encodings.
 pub type F32Repr = glam::Vec3;
 
 impl ColorRepr for F32Repr {
     type Element = f32;
 }
 
-/// Just a [`glam::Vec4`] (also equivalent in layot to a `[f32; 4]`). Used for 32-bits-per-channel, four channel encodings.
-pub type F32ARepr = glam::Vec4;
+/// Just a [`glam::Vec4`] (also equivalent in layot to a `[f32; 4]`). Used for
+/// 32-bits-per-channel, four channel encodings.
+pub type F32aRepr = glam::Vec4;
 
-impl ColorRepr for F32ARepr {
+impl ColorRepr for F32aRepr {
     type Element = f32;
 }

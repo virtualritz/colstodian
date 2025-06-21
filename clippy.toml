@@ -1,0 +1,10 @@
+# Clippy configuration for colstodian.
+
+# Increase cognitive complexity threshold for color math functions.
+cognitive-complexity-threshold = 30
+
+# Allow higher number of arguments for color constructor functions.
+too-many-arguments-threshold = 8
+
+# Performance lints.
+warn-on-all-wildcard-imports = true

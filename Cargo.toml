@@ -1,9 +1,9 @@
 [package]
 name = "colstodian"
-version = "0.2.0-alpha.0"
+version = "0.2.0"
 authors = ["Gray Olson <gray@grayolson.com>"]
 license = "MIT OR Apache-2.0 OR Zlib"
-edition = "2021"
+edition = "2024"
 description = "An opinionated, practical color management library for games and graphics."
 documentation = "https://docs.rs/colstodian"
 homepage = "https://github.com/fu5ha/colstodian"
@@ -12,27 +12,38 @@ repository = "https://github.com/fu5ha/colstodian"
 [package.metadata.docs.rs]
 features = ["std", "serde", "bytemuck"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/state/manifest.html
+[features]
+default = ["std", "bytemuck"]
+## Enable support for the standard library.
+std = ["kolor/std", "glam/std"]
+## `libm` is required when building with `no_std`.
+libm = ["kolor/libm", "glam/libm", "num-traits", "num-traits/libm"]
+## Add serde `Serialize`/`Deserialize` to relevant types.
+serde = ["dep:serde", "kolor/serde", "glam/serde"]
+## Enable support for `bytemuck`.
+bytemuck = ["dep:bytemuck", "glam/bytemuck"]
+# Enable `approx` trait implementations for testing.
+approx = ["dep:approx"]
 
 [dependencies]
-bytemuck = { version = "1.13.1", optional = true }
-cint = { version = "^0.3.1", features = ["bytemuck"] }
-glam = { version = "0.23", default-features = false } # keep in sync with kolor
+approx = { version = "0.5", optional = true }
+bytemuck = { version = "1", optional = true }
+cint = { version = "0.3", features = ["bytemuck"] }
+document-features = "0.2"
+glam = { version = "0.30", default-features = false } # keep in sync with kolor
+kolor = { version = "0.2", path = "../kolor", default-features = false, features = [
+    "glam",
+    "color-matrices",
+] }
 # kolor = { version = "^0.1.9", default-features = false, features = ["glam", "f32", "color-matrices"], path = "../kolor/build/kolor" }
-kolor = { version = "0.1.9", default-features = false, features = ["glam", "f32", "color-matrices"] }
 num-traits = { version = "0.2", optional = true, default-features = false }
 serde = { version = "1", optional = true, features = ["derive"] }
 
-[features]
-default = ["std", "bytemuck"]
+[dev-dependencies]
+approx = "0.5"
+criterion = { version = "0.5", features = ["html_reports"] }
+proptest = "1.0"
 
-# enable support for the standard library
-std = ["kolor/std", "glam/std"]
-
-# libm is required when building with no_std
-libm = ["kolor/libm", "glam/libm", "num-traits", "num-traits/libm"]
-
-# add serde Serialize/Deserialize to relevant types
-serde = ["dep:serde", "kolor/serde1", "glam/serde"]
-
-bytemuck = ["dep:bytemuck", "glam/bytemuck"]
+[[bench]]
+name = "color_conversions"
+harness = false

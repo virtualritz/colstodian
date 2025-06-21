@@ -11,7 +11,7 @@ use crate::{
 use glam::Vec3;
 use glam::Vec4;
 #[cfg(feature = "serde")]
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use serde::{Deserialize, Serialize, de::DeserializeOwned};
 
 use core::fmt;
 use core::ops::*;
@@ -22,17 +22,20 @@ use core::ops::*;
 /// The [`ColorEncoding`] defines a bunch of different properties about how the
 /// color values are stored and what those values actually mean. For example,
 /// [`Color<SrgbU8>`] is a color with red, green, and blue values that vary from
-/// `0-255` and the meaning of those values is defined by the full sRGB color encoding standard.
-/// The most common and standard color encodings are exposed in the
-/// [`basic_encodings`][crate::basic_encodings] module.
+/// `0-255` and the meaning of those values is defined by the full sRGB color
+/// encoding standard. The most common and standard color encodings are exposed
+/// in the [`basic_encodings`][crate::basic_encodings] module.
 ///
-/// To create a new [`Color`] value, see the list of constructor helpers in the docs below.
+/// To create a new [`Color`] value, see the list of constructor helpers in the
+/// docs below.
 ///
-/// There are several ways to work with an existing color. First, you can always access the raw data
-/// in the encoding's [`Repr`][ColorEncoding::Repr] directly by accessing `col.repr`. You can also always
-/// access the individual named color components through dot-syntax because of the `Deref` and `DerefMut`
-/// impls to the encoding's [`ComponentStruct`][ColorEncoding::ComponentStruct]. For example, in an RGB color space,
-/// you can access the components with `.r`, `.g`, and `.b`.
+/// There are several ways to work with an existing color. First, you can always
+/// access the raw data in the encoding's [`Repr`][ColorEncoding::Repr] directly
+/// by accessing `col.repr`. You can also always access the individual named
+/// color components through dot-syntax because of the `Deref` and `DerefMut`
+/// impls to the encoding's [`ComponentStruct`][ColorEncoding::ComponentStruct].
+/// For example, in an RGB color space, you can access the components with `.r`,
+/// `.g`, and `.b`.
 ///
 /// ```
 /// # use colstodian::Color;
@@ -54,20 +57,22 @@ use core::ops::*;
 /// assert_eq!(col2.b, 0.75);
 /// ```
 ///
-/// In order to do math on color types without accessing the underlying repr directly, you'll need
-/// to be in a [`WorkingEncoding`], which is a trait implemented by encodings that support doing
-/// such math operations well.
+/// In order to do math on color types without accessing the underlying repr
+/// directly, you'll need to be in a [`WorkingEncoding`], which is a trait
+/// implemented by encodings that support doing such math operations well.
 ///
-/// You can convert between color encodings using the [`.convert::<E>()`][Color::convert] method.
+/// You can convert between color encodings using the
+/// [`.convert::<E>()`][Color::convert] method.
 ///
 /// ### Basic Conversion Example
 ///
-/// Here we construct two colors in different ways, convert them both to [`LinearSrgb`] to work with them,
-/// and then convert the resul to [`SrgbU8`] which can be passed on to be displayed in an image.
+/// Here we construct two colors in different ways, convert them both to
+/// [`LinearSrgb`] to work with them, and then convert the resul to [`SrgbU8`]
+/// which can be passed on to be displayed in an image.
 ///
 /// ```
+/// use colstodian::basic_encodings::{LinearSrgb, SrgbU8};
 /// use colstodian::Color;
-/// use colstodian::basic_encodings::{SrgbU8, LinearSrgb};
 ///
 /// let color1 = Color::srgb_u8(102, 54, 220);
 /// let color2 = Color::srgb_f32(0.5, 0.8, 0.1);
@@ -79,7 +84,7 @@ use core::ops::*;
 ///
 /// let output = result_working.convert::<SrgbU8>();
 ///
-/// assert_eq!(output, Color::srgb_u8(144, 206, 163));
+/// assert_eq!(output, Color::srgb_u8(144, 207, 163));
 /// ```
 ///
 /// [`LinearSrgb`]: crate::details::encodings::LinearSrgb
@@ -108,7 +113,8 @@ impl<E: ColorEncoding> Clone for Color<E> {
 }
 
 impl<E: ColorEncoding> Color<E> {
-    /// Creates a [`Color`] from the raw data representation of the specified color encoding.
+    /// Creates a [`Color`] from the raw data representation of the specified
+    /// color encoding.
     #[inline(always)]
     pub const fn from_repr(repr: E::Repr) -> Self {
         Self { repr }
@@ -118,30 +124,38 @@ impl<E: ColorEncoding> Color<E> {
 impl<SrcEnc: ColorEncoding> Color<SrcEnc> {
     /// Converts `self` from one color encoding to another.
     ///
-    /// In order to be able to [`convert`][Color::convert] from `EncodingA` to `EncodingB`, `EncodingB`
-    /// must implement [`ConvertFrom<EncodingA>`].
+    /// In order to be able to [`convert`][Color::convert] from `EncodingA` to
+    /// `EncodingB`, `EncodingB` must implement [`ConvertFrom<EncodingA>`].
     ///
-    /// If that trait is not implemented for a pair of encodings, then a direct conversion without input or choice from the user
-    /// is not possible, and a conversion between the encodings will need to be performed manually or in more than one step.
+    /// If that trait is not implemented for a pair of encodings, then a direct
+    /// conversion without input or choice from the user is not possible,
+    /// and a conversion between the encodings will need to be performed
+    /// manually or in more than one step.
     ///
-    /// If you are able to [`convert`][Color::convert] from `EncodingA` to `EncodingB`, then you can also use a
-    /// `Color<EncodingA>` anywhere you need a type that implements [`ColorInto<Color<EncodingB>>`][crate::ColorInto]!
+    /// If you are able to [`convert`][Color::convert] from `EncodingA` to
+    /// `EncodingB`, then you can also use a `Color<EncodingA>` anywhere you
+    /// need a type that implements
+    /// [`ColorInto<Color<EncodingB>>`][crate::ColorInto]!
     ///
     /// ## Example
     ///
     /// ```
     /// # use colstodian::*;
     /// # use colstodian::basic_encodings::*;
-    /// # use colstodian::equals_eps::*;
+    /// # use approx::assert_relative_eq;
     /// let grey_f32 = Color::srgb_f32(0.5, 0.5, 0.5);
-    /// let grey_u8 = Color::srgb_u8(127, 127, 127);
+    /// let grey_u8 = Color::srgb_u8(128, 128, 128);
     ///
-    /// assert_eq_eps!(grey_f32.convert::<SrgbU8>(), grey_u8, 0);
+    /// assert_relative_eq!(grey_f32.convert::<SrgbU8>(), grey_u8, epsilon = 0);
     ///
     /// let col = Color::srgb_u8(102, 51, 153);
     /// let col_linear_srgb = col.convert::<LinearSrgb>();
     ///
-    /// assert_eq_eps!(col_linear_srgb, Color::linear_srgb(0.13287, 0.0331, 0.31855), 0.0001);
+    /// assert_relative_eq!(
+    ///     col_linear_srgb,
+    ///     Color::linear_srgb(0.13287, 0.0331, 0.31855),
+    ///     epsilon = 0.0001
+    /// );
     /// ```
     pub fn convert<DstEnc>(self) -> Color<DstEnc>
     where
@@ -167,9 +181,11 @@ impl<SrcEnc: ColorEncoding> Color<SrcEnc> {
         Color::from_repr(dst_repr)
     }
 
-    /// Interprets this color as `DstEnc`. Requires that `DstEnc`'s `ColorEncoding::Repr` is the same as `self`'s.
+    /// Interprets this color as `DstEnc`. Requires that `DstEnc`'s
+    /// `ColorEncoding::Repr` is the same as `self`'s.
     ///
-    /// Using this method assumes you have done an external computation/conversion such that this cast is valid.
+    /// Using this method assumes you have done an external
+    /// computation/conversion such that this cast is valid.
     #[inline(always)]
     pub fn cast<DstEnc: ColorEncoding<Repr = SrcEnc::Repr>>(self) -> Color<DstEnc> {
         Color { repr: self.repr }
@@ -177,7 +193,8 @@ impl<SrcEnc: ColorEncoding> Color<SrcEnc> {
 }
 
 impl<E: ColorEncoding + Saturate> Color<E> {
-    /// Clamp the raw element values of `self` within the current color encoding's valid range of values.
+    /// Clamp the raw element values of `self` within the current color
+    /// encoding's valid range of values.
     #[inline]
     pub fn saturate(self) -> Self {
         Self::from_repr(<E as Saturate>::saturate(self.repr))
@@ -200,9 +217,11 @@ where
     E: ColorEncoding + PerceptualEncoding + LinearInterpolate,
     E::Repr: Add<Output = E::Repr> + Sub<Output = E::Repr> + Mul<f32, Output = E::Repr>,
 {
-    /// Blend `self`'s color values with the color values from `other` with perceptually-linear interpolation.
+    /// Blend `self`'s color values with the color values from `other` with
+    /// perceptually-linear interpolation.
     ///
-    /// `factor` ranges from `[0..=1.0]`. If `factor` is > `1.0`, results may not be sensical.
+    /// `factor` ranges from `[0..=1.0]`. If `factor` is > `1.0`, results may
+    /// not be sensical.
     #[inline]
     pub fn perceptual_blend(self, other: Color<E>, factor: f32) -> Color<E> {
         self.lerp(other, factor)
@@ -214,13 +233,15 @@ where
     E: ColorEncoding + LinearInterpolate,
     E::Repr: Add<Output = E::Repr> + Sub<Output = E::Repr> + Mul<f32, Output = E::Repr>,
 {
-    /// Linearly interpolate from `self`'s value to `other`'s value. Not guaranteed to be perceptually
-    /// linear or pleasing!
+    /// Linearly interpolate from `self`'s value to `other`'s value. Not
+    /// guaranteed to be perceptually linear or pleasing!
     ///
-    /// If you want a better way to blend colors in a perceptually pleasing way, see [`Color::perceptual_blend`],
-    /// which requires that the color encoding is a [`PerceptualEncoding`].
+    /// If you want a better way to blend colors in a perceptually pleasing way,
+    /// see [`Color::perceptual_blend`], which requires that the color
+    /// encoding is a [`PerceptualEncoding`].
     ///
-    /// `factor` ranges from `[0..=1.0]`. If `factor` is > `1.0`, results may not be sensical.
+    /// `factor` ranges from `[0..=1.0]`. If `factor` is > `1.0`, results may
+    /// not be sensical.
     #[inline]
     pub fn lerp(self, other: Self, factor: f32) -> Self {
         <E as LinearInterpolate>::lerp(self, other, factor)
@@ -246,6 +267,24 @@ where
     #[inline(always)]
     fn eq(&self, other: &Color<E>) -> bool {
         self.repr == other.repr
+    }
+}
+
+impl<E> Eq for Color<E>
+where
+    E: ColorEncoding,
+    E::Repr: Eq,
+{
+}
+
+impl<E> core::hash::Hash for Color<E>
+where
+    E: ColorEncoding,
+    E::Repr: core::hash::Hash,
+{
+    #[inline(always)]
+    fn hash<H: core::hash::Hasher>(&self, state: &mut H) {
+        self.repr.hash(state);
     }
 }
 
@@ -333,10 +372,11 @@ where
 // of the same encoding because then we'd just end up with a unitless ratio.
 // If someone wants such a quantity, they can access the underlying data and
 // do componentwise division themselves, but the fact such an operation is not
-// implemented directly on the color type may give pause that the operation is often
-// nonsensical.
+// implemented directly on the color type may give pause that the operation is
+// often nonsensical.
 //
-// we also want to be able to add and subtract colors with the same encoding directly
+// we also want to be able to add and subtract colors with the same encoding
+// directly
 //
 // `col + col`
 // `col += col`
@@ -350,6 +390,7 @@ where
     E::Repr: Mul<Rhs, Output = E::Repr>,
 {
     type Output = Self;
+
     #[inline(always)]
     fn mul(self, rhs: Rhs) -> Self::Output {
         Self {
@@ -375,6 +416,7 @@ where
     E::Repr: Mul<f32, Output = E::Repr>,
 {
     type Output = Color<E>;
+
     #[inline(always)]
     fn mul(self, mut rhs: Color<E>) -> Self::Output {
         rhs.repr = rhs.repr.mul(self);
@@ -388,6 +430,7 @@ where
     E::Repr: Mul<Vec3, Output = E::Repr>,
 {
     type Output = Color<E>;
+
     #[inline(always)]
     fn mul(self, mut rhs: Color<E>) -> Self::Output {
         rhs.repr = rhs.repr.mul(self);
@@ -401,6 +444,7 @@ where
     E::Repr: Mul<Vec4, Output = E::Repr>,
 {
     type Output = Color<E>;
+
     #[inline(always)]
     fn mul(self, mut rhs: Color<E>) -> Self::Output {
         rhs.repr = rhs.repr.mul(self);
@@ -414,6 +458,7 @@ where
     E::Repr: Div<Rhs, Output = E::Repr>,
 {
     type Output = Self;
+
     #[inline(always)]
     fn div(self, rhs: Rhs) -> Self::Output {
         Self {
@@ -439,6 +484,7 @@ where
     E::Repr: Div<f32, Output = E::Repr>,
 {
     type Output = Color<E>;
+
     #[inline(always)]
     fn div(self, mut rhs: Color<E>) -> Self::Output {
         rhs.repr = rhs.repr.div(self);
@@ -452,6 +498,7 @@ where
     E::Repr: Div<Vec3, Output = E::Repr>,
 {
     type Output = Color<E>;
+
     #[inline(always)]
     fn div(self, mut rhs: Color<E>) -> Self::Output {
         rhs.repr = rhs.repr.div(self);
@@ -465,6 +512,7 @@ where
     E::Repr: Div<Vec4, Output = E::Repr>,
 {
     type Output = Color<E>;
+
     #[inline(always)]
     fn div(self, mut rhs: Color<E>) -> Self::Output {
         rhs.repr = rhs.repr.div(self);
@@ -478,6 +526,7 @@ where
     E::Repr: Add<Output = E::Repr>,
 {
     type Output = Self;
+
     #[inline(always)]
     fn add(self, rhs: Color<E>) -> Self::Output {
         Self {
@@ -503,6 +552,7 @@ where
     E::Repr: Sub<Output = E::Repr>,
 {
     type Output = Self;
+
     #[inline(always)]
     fn sub(self, rhs: Color<E>) -> Self::Output {
         Self {
