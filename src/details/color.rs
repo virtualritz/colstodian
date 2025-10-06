@@ -142,20 +142,19 @@ impl<SrcEnc: ColorEncoding> Color<SrcEnc> {
     /// ```
     /// # use colstodian::*;
     /// # use colstodian::basic_encodings::*;
-    /// # use approx::assert_relative_eq;
     /// let grey_f32 = Color::srgb_f32(0.5, 0.5, 0.5);
     /// let grey_u8 = Color::srgb_u8(128, 128, 128);
     ///
-    /// assert_relative_eq!(grey_f32.convert::<SrgbU8>(), grey_u8, epsilon = 0);
+    /// assert_eq!(grey_f32.convert::<SrgbU8>(), grey_u8);
     ///
     /// let col = Color::srgb_u8(102, 51, 153);
     /// let col_linear_srgb = col.convert::<LinearSrgb>();
+    /// let expected = Color::linear_srgb(0.13287, 0.0331, 0.31855);
     ///
-    /// assert_relative_eq!(
-    ///     col_linear_srgb,
-    ///     Color::linear_srgb(0.13287, 0.0331, 0.31855),
-    ///     epsilon = 0.0001
-    /// );
+    /// // Manual comparison for approximate equality.
+    /// assert!((col_linear_srgb.r - expected.r).abs() < 0.0001);
+    /// assert!((col_linear_srgb.g - expected.g).abs() < 0.0001);
+    /// assert!((col_linear_srgb.b - expected.b).abs() < 0.0001);
     /// ```
     pub fn convert<DstEnc>(self) -> Color<DstEnc>
     where

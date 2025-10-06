@@ -1,10 +1,11 @@
 use approx::assert_relative_eq;
-use colstodian::{Color, basic_encodings::*, details::encodings::*};
+use colstodian::details::encodings::EncodedSrgbF32;
+use colstodian::{Color, basic_encodings::*};
 
 #[test]
 fn srgb_u8_to_f32_conversion() {
     let u8_color = Color::srgb_u8(255, 0, 0);
-    let f32_color = u8_color.convert::<SrgbF32>();
+    let f32_color = u8_color.convert::<EncodedSrgbF32>();
 
     assert_relative_eq!(f32_color.r, 1.0, epsilon = 0.001);
     assert_relative_eq!(f32_color.g, 0.0, epsilon = 0.001);
@@ -35,7 +36,7 @@ fn srgb_to_linear_conversion() {
 #[test]
 fn linear_to_srgb_conversion() {
     let linear_color = Color::linear_srgb(1.0, 1.0, 1.0);
-    let srgb_color = linear_color.convert::<SrgbF32>();
+    let srgb_color = linear_color.convert::<EncodedSrgbF32>();
 
     // Linear white should convert to sRGB white.
     assert_relative_eq!(srgb_color.r, 1.0, epsilon = 0.001);

@@ -73,7 +73,7 @@ impl LinearColorSpace for Bt2020 {
 pub struct AcesCg;
 
 impl LinearColorSpace for AcesCg {
-    const PRIMARIES: RgbPrimaries = RgbPrimaries::Ap1;
+    const PRIMARIES: RgbPrimaries = RgbPrimaries::AcesAp1;
     const WHITE_POINT: WhitePoint = WhitePoint::D60;
 }
 
@@ -81,7 +81,7 @@ impl LinearColorSpace for AcesCg {
 pub struct Aces2065;
 
 impl LinearColorSpace for Aces2065 {
-    const PRIMARIES: RgbPrimaries = RgbPrimaries::Ap0;
+    const PRIMARIES: RgbPrimaries = RgbPrimaries::AcesAp0;
     const WHITE_POINT: WhitePoint = WhitePoint::D60;
 }
 
@@ -92,3 +92,52 @@ impl LinearColorSpace for DisplayP3 {
     const PRIMARIES: RgbPrimaries = RgbPrimaries::P3;
     const WHITE_POINT: WhitePoint = WhitePoint::D65;
 }
+
+/// A type representing the linear Adobe RGB (1998) color space.
+pub struct AdobeRgb;
+
+impl LinearColorSpace for AdobeRgb {
+    const PRIMARIES: RgbPrimaries = RgbPrimaries::Adobe1998;
+    const WHITE_POINT: WhitePoint = WhitePoint::D65;
+}
+
+/// A type representing the linear ProPhoto RGB color space.
+pub struct ProPhotoRgb;
+
+impl LinearColorSpace for ProPhotoRgb {
+    const PRIMARIES: RgbPrimaries = RgbPrimaries::ProPhoto;
+    const WHITE_POINT: WhitePoint = WhitePoint::D50;
+}
+
+// Bt2020 conversions
+impl_conversion!(Bt2020 to Bt2020            => None);
+impl_conversion!(Bt2020 to Srgb              => BT_2020_D65_TO_BT_709_D65);
+impl_conversion!(Bt2020 to CieXYZ            => BT_2020_D65_TO_CIE_XYZ_D65);
+impl_conversion!(Bt2020 to AcesCg            => BT_2020_D65_TO_AP1_D60);
+impl_conversion!(Bt2020 to Aces2065          => BT_2020_D65_TO_AP0_D60);
+impl_conversion!(Bt2020 to DisplayP3         => BT_2020_D65_TO_P3_D65);
+
+// AcesCg conversions
+impl_conversion!(AcesCg to AcesCg            => None);
+impl_conversion!(AcesCg to Srgb              => AP1_D60_TO_BT_709_D65);
+impl_conversion!(AcesCg to CieXYZ            => AP1_D60_TO_CIE_XYZ_D65);
+impl_conversion!(AcesCg to Bt2020            => AP1_D60_TO_BT_2020_D65);
+impl_conversion!(AcesCg to Aces2065          => AP1_D60_TO_AP0_D60);
+impl_conversion!(AcesCg to DisplayP3         => AP1_D60_TO_P3_D65);
+
+// Aces2065 conversions
+impl_conversion!(Aces2065 to Aces2065        => None);
+impl_conversion!(Aces2065 to Srgb            => AP0_D60_TO_BT_709_D65);
+impl_conversion!(Aces2065 to CieXYZ          => AP0_D60_TO_CIE_XYZ_D65);
+impl_conversion!(Aces2065 to Bt2020          => AP0_D60_TO_BT_2020_D65);
+impl_conversion!(Aces2065 to AcesCg          => AP0_D60_TO_AP1_D60);
+impl_conversion!(Aces2065 to DisplayP3       => AP0_D60_TO_P3_D65);
+
+// DisplayP3 conversions
+impl_conversion!(DisplayP3 to DisplayP3      => None);
+impl_conversion!(DisplayP3 to Srgb           => P3_D65_TO_BT_709_D65);
+impl_conversion!(DisplayP3 to CieXYZ         => P3_D65_TO_CIE_XYZ_D65);
+impl_conversion!(DisplayP3 to Bt2020         => P3_D65_TO_BT_2020_D65);
+impl_conversion!(DisplayP3 to AcesCg         => P3_D65_TO_AP1_D60);
+impl_conversion!(DisplayP3 to Aces2065       => P3_D65_TO_AP0_D60);
+

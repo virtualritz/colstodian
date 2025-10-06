@@ -1,6 +1,6 @@
 use approx::relative_eq;
 use colstodian::basic_encodings::*;
-use colstodian::details::encodings::*;
+use colstodian::details::encodings::{EncodedSrgbF32, Oklab};
 use colstodian::*;
 use proptest::prelude::*;
 
@@ -26,7 +26,7 @@ proptest! {
     ) {
         let original = Color::srgb_f32(r, g, b);
         let linear = original.convert::<LinearSrgb>();
-        let back = linear.convert::<SrgbF32>();
+        let back = linear.convert::<EncodedSrgbF32>();
 
         // Avoid extreme values near 0 and 1 where precision issues are more common.
         prop_assert!(relative_eq!(back.r, original.r, epsilon = 0.01));

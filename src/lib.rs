@@ -127,18 +127,26 @@ pub mod details {
 
 pub(crate) use details::*;
 
+/// Support for custom color spaces with user-defined primaries and white points.
+pub mod custom;
+
 /// Contains a basic set of [`ColorEncoding`]s to get most people going.
 ///
 /// These are all re-exported from inside the [`details::encodings`]
 pub mod basic_encodings {
     #[doc(inline)]
-    pub use crate::details::encodings::LinearSrgb;
+    pub use crate::details::encodings::EncodedSrgbU8;
     #[doc(inline)]
-    pub use crate::details::encodings::LinearSrgba;
+    pub use crate::details::encodings::EncodedSrgbaU8;
     #[doc(inline)]
-    pub use crate::details::encodings::SrgbU8;
+    pub use crate::details::encodings::Srgb;
     #[doc(inline)]
-    pub use crate::details::encodings::SrgbaU8;
+    pub use crate::details::encodings::Srgba;
+    // Backward compatibility aliases
+    pub use crate::details::encodings::EncodedSrgbU8 as SrgbU8;
+    pub use crate::details::encodings::EncodedSrgbaU8 as SrgbaU8;
+    pub use crate::details::encodings::Srgb as LinearSrgb;
+    pub use crate::details::encodings::Srgba as LinearSrgba;
 }
 
 #[doc(inline)]
@@ -171,14 +179,16 @@ pub use traits::PerceptualEncoding;
 ///
 /// ```
 /// # use colstodian::*;
-/// # use colstodian::details::encodings::*;
-/// # use approx::assert_relative_eq;
+/// # use colstodian::basic_encodings::LinearSrgb;
 /// type MyColor = Color<LinearSrgb>;
 ///
 /// fn test_fn(input: impl ColorInto<MyColor>) {
 ///     let input: MyColor = input.color_into();
 ///     let correct = Color::linear_srgb(0.14703, 0.42327, 0.22323);
-///     assert_relative_eq!(input, correct, epsilon = 0.00001);
+///     // Manual comparison for approximate equality.
+///     assert!((input.r - correct.r).abs() < 0.00001);
+///     assert!((input.g - correct.g).abs() < 0.00001);
+///     assert!((input.b - correct.b).abs() < 0.00001);
 /// }
 ///
 /// test_fn(Color::srgb_u8(107, 174, 130));
@@ -202,4 +212,3 @@ where
         self.convert()
     }
 }
-

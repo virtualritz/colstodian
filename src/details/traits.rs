@@ -125,6 +125,16 @@ pub trait WorkingEncoding: ColorEncoding {}
 pub trait LinearColorSpace {
     const PRIMARIES: RgbPrimaries;
     const WHITE_POINT: WhitePoint;
+
+    /// Get the primaries of this linear color space.
+    fn primaries() -> RgbPrimaries {
+        Self::PRIMARIES
+    }
+
+    /// Get the white point of this linear color space.
+    fn white_point() -> WhitePoint {
+        Self::WHITE_POINT
+    }
 }
 
 /// A trait that marks `Self` as being a color encoding which is able to be

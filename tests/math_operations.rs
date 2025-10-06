@@ -1,6 +1,6 @@
+use approx::assert_relative_eq;
 use colstodian::*;
 use glam::Vec3;
-use approx::assert_relative_eq;
 
 #[test]
 fn linear_color_addition() {

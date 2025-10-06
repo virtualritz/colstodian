@@ -1,4 +1,3 @@
-use approx::assert_relative_eq;
 use colstodian::{Color, basic_encodings::*, details::encodings::*};
 
 #[test]
@@ -26,11 +25,17 @@ fn oklab_blend_extremes() {
 
     // Blend with self at t=0 should return original.
     let blend_zero = oklab.perceptual_blend(oklab, 0.0);
-    assert_relative_eq!(blend_zero, oklab, epsilon = 0.001);
+    // Manual comparison since approx traits might not be available without the feature.
+    assert!((blend_zero.l - oklab.l).abs() < 0.001);
+    assert!((blend_zero.a - oklab.a).abs() < 0.001);
+    assert!((blend_zero.b - oklab.b).abs() < 0.001);
 
     // Blend with self at t=1 should return original.
     let blend_one = oklab.perceptual_blend(oklab, 1.0);
-    assert_relative_eq!(blend_one, oklab, epsilon = 0.001);
+    // Manual comparison since approx traits might not be available without the feature.
+    assert!((blend_one.l - oklab.l).abs() < 0.001);
+    assert!((blend_one.a - oklab.a).abs() < 0.001);
+    assert!((blend_one.b - oklab.b).abs() < 0.001);
 }
 
 #[test]

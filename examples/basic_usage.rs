@@ -1,5 +1,5 @@
 use colstodian::basic_encodings::*;
-use colstodian::details::encodings::*;
+use colstodian::details::encodings::EncodedSrgbF32;
 use colstodian::*;
 
 /// Basic color creation and conversion examples.
@@ -18,7 +18,7 @@ fn main() {
     // Convert between encodings.
     println!("\n=== Color Conversions ===");
 
-    let u8_to_f32 = color_u8.convert::<SrgbF32>();
+    let u8_to_f32 = color_u8.convert::<EncodedSrgbF32>();
     let f32_to_linear = color_f32.convert::<LinearSrgb>();
     let linear_to_u8 = color_linear.convert::<SrgbU8>();
 

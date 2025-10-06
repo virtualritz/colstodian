@@ -1,5 +1,5 @@
 use colstodian::basic_encodings::*;
-use colstodian::details::encodings::*;
+use colstodian::details::encodings::{EncodedSrgbF32, Oklab};
 use colstodian::*;
 use criterion::{Criterion, black_box, criterion_group, criterion_main};
 
@@ -43,7 +43,7 @@ fn bench_linear_to_srgb_u8(c: &mut Criterion) {
 }
 
 fn bench_srgb_f32_to_linear(c: &mut Criterion) {
-    let colors: Vec<Color<SrgbF32>> = (0..1000)
+    let colors: Vec<Color<EncodedSrgbF32>> = (0..1000)
         .map(|i| {
             let f = i as f32 / 1000.0;
             Color::srgb_f32(f, (f * 2.0) % 1.0, (f * 3.0) % 1.0)
