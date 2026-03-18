@@ -45,6 +45,8 @@ impl_conversion!(Srgb to Bt2020            => BT_709_D65_TO_BT_2020_D65);
 impl_conversion!(Srgb to AcesCg            => BT_709_D65_TO_AP1_D60);
 impl_conversion!(Srgb to Aces2065          => BT_709_D65_TO_AP0_D60);
 impl_conversion!(Srgb to DisplayP3         => BT_709_D65_TO_P3_D65);
+impl_conversion!(Srgb to AdobeRgb          => BT_709_D65_TO_ADOBE_1998_D65);
+impl_conversion!(Srgb to ProPhotoRgb       => BT_709_D65_TO_PRO_PHOTO_D50);
 
 /// A type representing the reference CIE XYZ 1931 color space.
 pub struct CieXYZ;
@@ -60,6 +62,8 @@ impl_conversion!(CieXYZ to Bt2020            => CIE_XYZ_D65_TO_BT_2020_D65);
 impl_conversion!(CieXYZ to AcesCg            => CIE_XYZ_D65_TO_AP1_D60);
 impl_conversion!(CieXYZ to Aces2065          => CIE_XYZ_D65_TO_AP0_D60);
 impl_conversion!(CieXYZ to DisplayP3         => CIE_XYZ_D65_TO_P3_D65);
+impl_conversion!(CieXYZ to AdobeRgb          => CIE_XYZ_D65_TO_ADOBE_1998_D65);
+impl_conversion!(CieXYZ to ProPhotoRgb       => CIE_XYZ_D65_TO_PRO_PHOTO_D50);
 
 /// A type representing the BT.2020 linear color space.
 pub struct Bt2020;
@@ -116,6 +120,8 @@ impl_conversion!(Bt2020 to CieXYZ            => BT_2020_D65_TO_CIE_XYZ_D65);
 impl_conversion!(Bt2020 to AcesCg            => BT_2020_D65_TO_AP1_D60);
 impl_conversion!(Bt2020 to Aces2065          => BT_2020_D65_TO_AP0_D60);
 impl_conversion!(Bt2020 to DisplayP3         => BT_2020_D65_TO_P3_D65);
+impl_conversion!(Bt2020 to AdobeRgb          => BT_2020_D65_TO_ADOBE_1998_D65);
+impl_conversion!(Bt2020 to ProPhotoRgb       => BT_2020_D65_TO_PRO_PHOTO_D50);
 
 // AcesCg conversions
 impl_conversion!(AcesCg to AcesCg            => None);
@@ -124,6 +130,8 @@ impl_conversion!(AcesCg to CieXYZ            => AP1_D60_TO_CIE_XYZ_D65);
 impl_conversion!(AcesCg to Bt2020            => AP1_D60_TO_BT_2020_D65);
 impl_conversion!(AcesCg to Aces2065          => AP1_D60_TO_AP0_D60);
 impl_conversion!(AcesCg to DisplayP3         => AP1_D60_TO_P3_D65);
+impl_conversion!(AcesCg to AdobeRgb          => AP1_D60_TO_ADOBE_1998_D65);
+impl_conversion!(AcesCg to ProPhotoRgb       => AP1_D60_TO_PRO_PHOTO_D50);
 
 // Aces2065 conversions
 impl_conversion!(Aces2065 to Aces2065        => None);
@@ -132,6 +140,8 @@ impl_conversion!(Aces2065 to CieXYZ          => AP0_D60_TO_CIE_XYZ_D65);
 impl_conversion!(Aces2065 to Bt2020          => AP0_D60_TO_BT_2020_D65);
 impl_conversion!(Aces2065 to AcesCg          => AP0_D60_TO_AP1_D60);
 impl_conversion!(Aces2065 to DisplayP3       => AP0_D60_TO_P3_D65);
+impl_conversion!(Aces2065 to AdobeRgb        => AP0_D60_TO_ADOBE_1998_D65);
+impl_conversion!(Aces2065 to ProPhotoRgb     => AP0_D60_TO_PRO_PHOTO_D50);
 
 // DisplayP3 conversions
 impl_conversion!(DisplayP3 to DisplayP3      => None);
@@ -140,4 +150,26 @@ impl_conversion!(DisplayP3 to CieXYZ         => P3_D65_TO_CIE_XYZ_D65);
 impl_conversion!(DisplayP3 to Bt2020         => P3_D65_TO_BT_2020_D65);
 impl_conversion!(DisplayP3 to AcesCg         => P3_D65_TO_AP1_D60);
 impl_conversion!(DisplayP3 to Aces2065       => P3_D65_TO_AP0_D60);
+impl_conversion!(DisplayP3 to AdobeRgb       => P3_D65_TO_ADOBE_1998_D65);
+impl_conversion!(DisplayP3 to ProPhotoRgb    => P3_D65_TO_PRO_PHOTO_D50);
+
+// AdobeRgb conversions
+impl_conversion!(AdobeRgb to AdobeRgb        => None);
+impl_conversion!(AdobeRgb to Srgb            => ADOBE_1998_D65_TO_BT_709_D65);
+impl_conversion!(AdobeRgb to CieXYZ          => ADOBE_1998_D65_TO_CIE_XYZ_D65);
+impl_conversion!(AdobeRgb to Bt2020          => ADOBE_1998_D65_TO_BT_2020_D65);
+impl_conversion!(AdobeRgb to AcesCg          => ADOBE_1998_D65_TO_AP1_D60);
+impl_conversion!(AdobeRgb to Aces2065        => ADOBE_1998_D65_TO_AP0_D60);
+impl_conversion!(AdobeRgb to DisplayP3       => ADOBE_1998_D65_TO_P3_D65);
+impl_conversion!(AdobeRgb to ProPhotoRgb     => ADOBE_1998_D65_TO_PRO_PHOTO_D50);
+
+// ProPhotoRgb conversions
+impl_conversion!(ProPhotoRgb to ProPhotoRgb  => None);
+impl_conversion!(ProPhotoRgb to Srgb         => PRO_PHOTO_D50_TO_BT_709_D65);
+impl_conversion!(ProPhotoRgb to CieXYZ       => PRO_PHOTO_D50_TO_CIE_XYZ_D65);
+impl_conversion!(ProPhotoRgb to Bt2020       => PRO_PHOTO_D50_TO_BT_2020_D65);
+impl_conversion!(ProPhotoRgb to AcesCg       => PRO_PHOTO_D50_TO_AP1_D60);
+impl_conversion!(ProPhotoRgb to Aces2065     => PRO_PHOTO_D50_TO_AP0_D60);
+impl_conversion!(ProPhotoRgb to DisplayP3    => PRO_PHOTO_D50_TO_P3_D65);
+impl_conversion!(ProPhotoRgb to AdobeRgb     => PRO_PHOTO_D50_TO_ADOBE_1998_D65);
 
