@@ -86,9 +86,9 @@ fn test_color_to_custom_rgb() {
     let (r, g, b) = srgb.to_custom_rgb(&space);
 
     // Values should be roughly preserved since we're using sRGB primaries.
-    assert!(r >= 0.0 && r <= 1.0);
-    assert!(g >= 0.0 && g <= 1.0);
-    assert!(b >= 0.0 && b <= 1.0);
+    assert!((0.0..=1.0).contains(&r));
+    assert!((0.0..=1.0).contains(&g));
+    assert!((0.0..=1.0).contains(&b));
 }
 
 #[test]

@@ -1,6 +1,5 @@
 // Approx trait implementations for testing
 use crate::component_structs::*;
-use crate::traits::*;
 use crate::*;
 use approx::{AbsDiffEq, RelativeEq};
 
